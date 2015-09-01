@@ -3,11 +3,13 @@
   ignore_errors: true
 
 - name: copy over nginx site conf
+  sudo: yes
   template: src=factual.j2 dest=/etc/nginx/sites-available/factual
   notify:
     - reload nginx
 
 - name: Create link to enabled site
+  sudo: yes
   file: src=/etc/nginx/sites-available/factual
         dest=/etc/nginx/sites-enabled/factual
         state=link
