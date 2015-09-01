@@ -3,3 +3,10 @@
 	display: none;
 	margin-bottom: 20px;
 }
+
+.categoryLabel {
+	display: block;
+	float: left;
+	margin-top: 3px;
+	margin-left: 3px;
+}

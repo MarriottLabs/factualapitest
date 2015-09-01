@@ -1,5 +1,5 @@
 var app = {
-	API_BASE_URL: 'https://factualserver.marriottlabs.com/',
+	API_BASE_URL: 'https://factualserver.marriottlabs.com',
 	GOOGLE_MAPS_KEY: 'AIzaSyB6gr2x_5tRO07och-OMr44GFjGA_zmGxc',
 	ALPHABET: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
@@ -127,7 +127,7 @@ var app = {
 
      			if (place.category_labels) {
      				for (m = 0; m < place.category_labels[0].length; m++) {
-     					resultsHTML += '<span class="label label-primary">' + place.category_labels[0][m] + '</span>&nbsp;&nbsp;';
+     					resultsHTML += '<span class="label label-primary categoryLabel">' + place.category_labels[0][m] + '</span>  ';
      				}
      			}
 
