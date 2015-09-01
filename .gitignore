@@ -1,4 +1,5 @@
 server/node_modules
+.vault_password.txt
 .vagrant
 **.terraform
 deployment/ansible/cache/*
