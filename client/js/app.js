@@ -1,5 +1,5 @@
 var app = {
-	API_BASE_URL: 'http://factualapi.elasticbeanstalk.com',
+	API_BASE_URL: 'https://factualserver.marriottlabs.com/',
 	GOOGLE_MAPS_KEY: 'AIzaSyB6gr2x_5tRO07och-OMr44GFjGA_zmGxc',
 	ALPHABET: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
