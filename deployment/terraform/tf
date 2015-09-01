@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+terraform "${@}" -var secret_key=${AWS_SECRET_ACCESS_KEY} -var access_key=${AWS_ACCESS_KEY_ID}

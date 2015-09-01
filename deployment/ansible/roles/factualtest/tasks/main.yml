@@ -1,0 +1,5 @@
+---
+- include_vars: secrets.yml
+
+- include: aws.yml
+  when: not vagrant

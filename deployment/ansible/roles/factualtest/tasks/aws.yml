@@ -1,0 +1,54 @@
+- name: Cleanup old docker images
+  shell: docker rmi $(docker images -q -f dangling=true)
+  ignore_errors: true
+
+- name: copy over nginx site conf
+  template: src=factual.j2 dest=/etc/nginx/sites-available/factual
+  notify:
+    - reload nginx
+
+- name: Create link to enabled site
+  file: src=/etc/nginx/sites-available/factual
+        dest=/etc/nginx/sites-enabled/factual
+        state=link
+  notify:
+    - reload nginx
+
+- name: Pull latest server
+  shell: docker pull docker.marriottlabs.com:443/factualserver:latest
+
+- name: Pull latest client
+  shell: docker pull docker.marriottlabs.com:443/factualclient:latest
+
+- name: Kill client
+  docker:
+    name: factualclient
+    image: docker.marriottlabs.com:443/factualclient:latest
+    state: absent
+
+- name: Kill server
+  docker:
+    name: factualserver
+    image: docker.marriottlabs.com:443/factualserver:latest
+    state: absent
+
+- name: Bounce client
+  docker:
+    name: factualclient
+    image: docker.marriottlabs.com:443/factualclient:latest
+    state: running
+    restart_policy: on-failure
+    ports:
+        - "9999:80"
+
+- name: Bounce server
+  docker:
+    name: factualserver
+    image: docker.marriottlabs.com:443/factualserver:latest
+    state: running
+    restart_policy: on-failure
+    env:
+      FACTUAL_KEY: "{{ factual_key }}"
+      FACTUAL_SECRET: "{{ factual_secret }}"
+    ports:
+        - "8888:8888"
