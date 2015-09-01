@@ -38,7 +38,7 @@ router.route('/places').get(
 
 router.route('/crosswalk').get(
 	function(request, response) {
-		factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '", "namespace": "' + request.query.namespace + '"}',
+		factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '"' + (request.query.namespace ? ', "namespace": "' + request.query.namespace + '"' : '') + '}',
 			function (error, res) {
 				if (! error) {
 					response.jsonp(res.data);
