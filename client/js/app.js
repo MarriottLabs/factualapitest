@@ -106,8 +106,9 @@ var app = {
 
 				resultsHTML += ''
 					+ '<div class="panel panel-primary">'
-					+ '    <div class="panel-heading"><span class="panel-title">' + markerLabel + ') ' + place.name + ' </span>(' + app.metersToMiles(place['$distance'], 1) + ' mi)' + (place.neighborhood ? '<span class="pull-right"><i class="fa fa-home"></i> ' + place.neighborhood[0] + '</span>' : '') + '</div>'
+					+ '    <div class="panel-heading"><span class="panel-title">' + markerLabel + ') ' + place.name + ' </span>(' + app.metersToMiles(place['$distance'], 1) + ' mi)</div>'
 					+ '    <div class="panel-body">'
+					+ (place.neighborhood ? '<p class="pull-right"><i class="fa fa-home"></i> ' + place.neighborhood[0] + '</p><br/>' : '') 
     				+ '        ' + place.address + ' ' + (place.address_extended || '') + '<br/>'
     				+ '        ' + place.locality + ', ' + place.region + ' ' + place.postcode + '<br/>';
 
@@ -123,7 +124,7 @@ var app = {
      				resultsHTML += '<br/><i class="fa fa-clock-o"></i> ' + place.hours_display + '<br/>';
      			}
 
-     			resultsHTML += '<br/>';
+     			resultsHTML += '<div id="crosswalkData-' + place.factual_id + '"></div><br/>';
 
      			if (place.category_labels) {
      				for (m = 0; m < place.category_labels[0].length; m++) {
