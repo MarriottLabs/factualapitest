@@ -6,6 +6,8 @@ var app = {
 
 	initialize: function() {
 		$('#searchBtn').click(app.onSearchInitiated);
+		$('#nameSearchBtn').click(app.onNameSearchInitiated);
+		$('#nameSearchTerm').keyup(app.onNameSearchKeyUp);
 	},
 
 	metersToMiles: function(i, decimalPlaces) {
@@ -36,6 +38,45 @@ var app = {
 				+ '    <strong><i class="fa fa-exclamation-triangle"></i>&nbsp;Error:&nbsp;</strong> ' + errorMessage
 			+ '</div>'
 		);
+	},
+
+	onNameSearchKeyUp: function() {
+		var searchTerm = $('#nameSearchTerm').val();
+
+		if (searchTerm.length === 0) {
+			$('#typeAheadDebug').html('');
+			$('#typeAheadDebug').hide();
+		} else {
+			$.ajax({
+				cache: false,
+				error: function() {
+					console.log('Something went wrong with onNameSearchKeyPress :(');
+				},
+				method: 'GET',
+				success: function(data, status, xhr) {
+					var n = 0;
+					var htmlStr = '<ul>';
+
+					for (n = 0; n < data.length; n++) {
+						htmlStr += '<li>' + data[n].name + ' (' + app.metersToMiles(data[n]['$distance'], 1) + ' mi)</li>';
+					}
+
+					htmlStr += '</ul>';
+
+					$('#typeAheadDebug').html(htmlStr);
+					$('#typeAheadDebug').show();
+					console.log(data);
+				},
+				timeout: 3000,
+				url: app.API_BASE_URL + '/namesearch?searchTerm=' + searchTerm + '&latitude=' + '32.721467' + '&longitude=' + '-117.164403' + '&radius=5000'
+			});	
+		}
+	},
+
+	onNameSearchInitiated: function(e) {
+		e.stopPropagation();
+		app.displayError('This is not implemented yet.');
+		return false;
 	},
 
 	onSearchInitiated: function(e) {
