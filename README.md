@@ -35,4 +35,8 @@ Just the Yelp information for Pappalecco:
 http://localhost:8888/crosswalk?id=1adee49b-39d9-4189-9bab-bf19c59c46a2&namespace=yelp
 ```
 
+Places whose name begins with "pa" within 5000 meters of a residence in downtown San Diego:
 
+```
+http://localhost:8888/namesearch?searchTerm=pa&latitude=32.721467&longitude=-117.164403&radius=5000
+```
