@@ -1,6 +1,6 @@
 var app = {
-	//API_BASE_URL: 'https://factualserver.marriottlabs.com',
-	API_BASE_URL: 'http://localhost:8888',
+	API_BASE_URL: 'https://factualserver.marriottlabs.com',
+	//API_BASE_URL: 'http://localhost:8888',
 	GOOGLE_MAPS_KEY: 'AIzaSyB6gr2x_5tRO07och-OMr44GFjGA_zmGxc',
 	ALPHABET: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
