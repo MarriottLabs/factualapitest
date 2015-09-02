@@ -43,7 +43,7 @@ var app = {
 	onNameSearchKeyUp: function() {
 		var searchTerm = $('#nameSearchTerm').val();
 
-		if (searchTerm.length === 0) {
+		if (searchTerm.trim().length === 0) {
 			$('#typeAheadDebug').html('');
 			$('#typeAheadDebug').hide();
 		} else {
@@ -65,7 +65,6 @@ var app = {
 
 					$('#typeAheadDebug').html(htmlStr);
 					$('#typeAheadDebug').show();
-					console.log(data);
 				},
 				timeout: 3000,
 				url: app.API_BASE_URL + '/namesearch?searchTerm=' + searchTerm + '&latitude=' + '32.721467' + '&longitude=' + '-117.164403' + '&radius=5000'
