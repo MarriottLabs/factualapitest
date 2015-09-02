@@ -55,10 +55,10 @@ var app = {
 				method: 'GET',
 				success: function(data, status, xhr) {
 					var n = 0;
-					var htmlStr = '<ul>';
+					var htmlStr = '<ul class="list-group">';
 
 					for (n = 0; n < data.length; n++) {
-						htmlStr += '<li>' + data[n].name + ' (' + app.metersToMiles(data[n]['$distance'], 1) + ' mi)</li>';
+						htmlStr += '<li class="list-group-item">' + data[n].name + ' (' + app.metersToMiles(data[n]['$distance'], 1) + ' mi)</li>';
 					}
 
 					htmlStr += '</ul>';
