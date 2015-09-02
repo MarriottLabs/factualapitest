@@ -1,5 +1,6 @@
 var app = {
-	API_BASE_URL: 'https://factualserver.marriottlabs.com',
+	//API_BASE_URL: 'https://factualserver.marriottlabs.com',
+	API_BASE_URL: 'http://localhost:8888',
 	GOOGLE_MAPS_KEY: 'AIzaSyB6gr2x_5tRO07och-OMr44GFjGA_zmGxc',
 	ALPHABET: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
@@ -88,6 +89,8 @@ var app = {
 
 			bounds = new google.maps.LatLngBounds();
 
+			searchResults.html('');
+
 			for (n = 0; n < len; n++) {
 				place = data[n];
 				markerLabel = app.getNthLetterOfAlphabet(n + 1);
@@ -104,7 +107,7 @@ var app = {
 
   				bounds.extend(marker.getPosition());
 
-				resultsHTML += ''
+				resultsHTML = ''
 					+ '<div class="panel panel-primary">'
 					+ '    <div class="panel-heading"><span class="panel-title">' + markerLabel + ') ' + place.name + ' </span>(' + app.metersToMiles(place['$distance'], 1) + ' mi)</div>'
 					+ '    <div class="panel-body">'
@@ -136,6 +139,84 @@ var app = {
      				+ '    </div>'
 					+ '</div>';
 
+				searchResults.append(resultsHTML);
+
+				// Get the crosswalk data
+				(function(factualId) {
+					$.ajax({
+						cache: false,
+						error: function(error) {
+							console.log('Crosswalk API call failed:');
+							console.log(error);
+						},
+						method: 'GET',
+						success: function(data, status, xhr) {
+							var target = $('#crosswalkData-' + factualId);
+							var htmlStr = '';
+							var n = 0;
+							var yelpSeen = false;
+							var twitterSeen = false;
+							var facebookSeen = false;
+							var urbanspoonSeen = false;
+							var yahoolocalSeen = false;
+							var yellowpagesSeen = false;
+							var foursquareSeen = false;
+
+							if (data) {
+								for (n = 0; n < data.length; n++) {
+									switch(data[n].namespace) {
+										case 'twitter':
+											if (! twitterSeen) {
+												htmlStr += '<i class="fa fa-twitter"></i> <a href="' + data[n].url + '" target="_blank">' + data[n].namespace_id + '</a><br/>';
+												twitterSeen = true;
+											}
+											break;
+										case 'facebook':
+											if (! facebookSeen) {
+												htmlStr += '<i class="fa fa-facebook"></i> <a href="' + data[n].url + '" target="_blank">Facebook</a><br/>';
+												facebookSeen = true;
+											}
+											break;
+										case 'yelp':
+											if (! yelpSeen) {
+												htmlStr += '<i class="fa fa-yelp"></i> <a href="' + data[n].url + '" target="_blank">Yelp</a><br/>';
+												yelpSeen = true;
+											}
+											break;
+										case 'urbanspoon':
+											if (! urbanspoonSeen) {
+												htmlStr += '<i class="fa fa-spoon"></i> <a href="' + data[n].url + '" target="_blank">Zomato (Urbanspoon)</a><br/>';
+												urbanspoonSeen = true;
+											}
+											break;
+										case 'yahoolocal':
+											if (! yahoolocalSeen) {
+												htmlStr += '<i class="fa fa-yahoo"></i> <a href="' + data[n].url + '" target="_blank">Yahoo! Local</a><br/>';
+												yahoolocalSeen = true;
+											}
+											break;
+										case 'yellowpages':
+											if (! yellowpagesSeen) {
+												htmlStr += '<i class="fa fa-book"></i> <a href="' + data[n].url + '" target="_blank">Yellow Pages</a><br/>';
+												yellowpagesSeen = true;
+											}
+											break;
+										case 'foursquare':
+											if (! foursquareSeen) {
+												htmlStr += '<i class="fa fa-foursquare"></i> <a href="' + data[n].url + '" target="_blank">Foursquare</a><br/>';
+												foursquareSeen = true;
+											}
+											break;
+									}
+								}
+							}
+
+							target.html(htmlStr);
+						},
+						timeout: 5000,
+						url: app.API_BASE_URL + '/crosswalk?id=' + factualId
+					});	
+				})(place.factual_id);
 			}
 
 			map.fitBounds(bounds);
@@ -143,8 +224,6 @@ var app = {
 			if (map.getZoom() > 15) {
   				map.setZoom(12);
 			}
-
-			searchResults.html(resultsHTML);
 		} else {
 			$('#map').hide();
 
