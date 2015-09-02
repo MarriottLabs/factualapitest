@@ -40,3 +40,34 @@ Places whose name begins with "pa" within 5000 meters of a residence in downtown
 ```
 http://localhost:8888/namesearch?searchTerm=pa&latitude=32.721467&longitude=-117.164403&radius=5000
 ```
+
+##Running Example
+
+The sample front end is running at:
+
+* https://factualclient.marriottlabs.com/
+
+This currently has two input boxes.  The topmost one demonstrates place name autocomplete for a hard coded geolocation in Little Italy, San Diego.
+
+The bottom one demonstrates full text search relative to your current location.
+
+The API proxy backend is running at:
+
+* https://factualserver.marriottlabs.com
+
+So to make the queries shown above against this instance, just go to:
+
+* https://factualserver.marriottlabs.com/places?q=coffee&latitude=32.721467&longitude=-117.164403&radius=5000
+* https://factualserver.marriottlabs.com/crosswalk?id=1adee49b-39d9-4189-9bab-bf19c59c46a2
+* https://factualserver.marriottlabs.com/crosswalk?id=1adee49b-39d9-4189-9bab-bf19c59c46a2&namespace=yelp
+* https://factualserver.marriottlabs.com/namesearch?searchTerm=pa&latitude=32.721467&longitude=-117.164403&radius=5000
+
+To try other locations, just substitute their lat/long in.
+
+## Factual API Documentation
+
+Factual's API supports a lot more search critera and complex polygon geofencing.  Documentation is here:
+
+* http://developer.factual.com/
+* http://developer.factual.com/common-places-use-case-examples/
+
