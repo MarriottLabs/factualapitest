@@ -66,6 +66,22 @@ router.route('/crosswalk').get(
 	}
 );
 
+router.route('/namesearch').get(
+	function(request, response) {
+		console.log('/t/places-us?geo={"$circle":{"$center":[' + request.query.latitude + ',' + request.query.longitude + '],"$meters":' + (request.query.radius || 1000) + '}}&filters={"name":{"$bw":"' + request.query.searchTerm + '"}}&select=name');
+		factual.get('/t/places-us?geo={"$circle":{"$center":[' + request.query.latitude + ',' + request.query.longitude + '],"$meters":' + (request.query.radius || 1000) + '}}&filters={"name":{"$bw":"' + request.query.searchTerm + '"}}&select=name,factual_id',
+			function(error, res) {
+				if (! error) {
+					response.jsonp(res.data);
+				} else {
+					console.log(error);
+					response.jsonp([]);
+				}
+			}
+		);
+	}
+);
+
 app.use(cors());
 app.use('/', router);
 app.listen(port);
