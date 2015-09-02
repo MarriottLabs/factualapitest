@@ -6,7 +6,7 @@ var port = process.env.PORT || 8888;
 var Factual = require('factual-api');
 var factual = new Factual(process.env.FACTUAL_KEY, process.env.FACTUAL_SECRET);
 
-var crosswalkCache = {};
+crosswalkCache = {};
 
 router.route('/places').get(
 	function(request, response) {
@@ -41,17 +41,19 @@ router.route('/places').get(
 router.route('/crosswalk').get(
 	function(request, response) {
 		// Check if we have this in the cache as we only get 500 crosswalk queries a day
-		var cacheKey = 'cacheKey' + request.query.id + (request.query.namespace || '');
-		var cachedData = crosswalkCache.cacheKey;
+		//var cacheKey = 'cacheKey' + request.query.id + (request.query.namespace || '');
+		//var cachedData = crosswalkCache.cacheKey;
 
-		if (cachedData) {
-			console.log('Serving ' + cacheKey + ' from crosswalk API cache.');
-			response.jsonp(cachedData);
-		} else {
+		// if (cachedData) {
+		// 	console.log('Serving ' + cacheKey + ' from crosswalk API cache.');
+		// 	response.jsonp(cachedData);
+		// 	return;
+		// } else {
 			factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '"' + (request.query.namespace ? ', "namespace": "' + request.query.namespace + '"' : '') + '}',
 				function (error, res) {
 					if (! error) {
-						crosswalkCache.cacheKey = res.data;
+						// console.log('Setting ' + cacheKey);
+						// crosswalkCache.cacheKey = JSON.parse(JSON.stringify(res.data));
 						response.jsonp(res.data);
 					} else {
 						// TODO error case...
@@ -60,7 +62,7 @@ router.route('/crosswalk').get(
 					}
 				}
 			);
-		}
+		// }
 	}
 );
 
