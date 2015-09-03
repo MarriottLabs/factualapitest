@@ -291,7 +291,7 @@ var app = {
 						app.onSearchSuccess(data, status, xhr, pos.coords.latitude, pos.coords.longitude);
 					},
 					timeout: 5000,
-					url: app.API_BASE_URL + '/places?q=' + searchTerm + '&latitude=' + pos.coords.latitude + '&longitude=' + pos.coords.longitude
+					url: app.API_BASE_URL + '/places?country=us&q=' + searchTerm + '&latitude=' + pos.coords.latitude + '&longitude=' + pos.coords.longitude
 				});	
 			},
 			app.onGeolocationError,

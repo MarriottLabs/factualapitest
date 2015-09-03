@@ -12,8 +12,9 @@ router.route('/places').get(
 	function(request, response) {
 		// TODO check parameters
 
+		var countryCode = request.query.country;
 		factual.get(
-			'/t/places-us', 
+			'/t/places' + (request.query.country ? '-' + request.query.country : ''), 
 			{
 				q: request.query.q, 
 				geo: {
