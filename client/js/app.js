@@ -6,6 +6,7 @@ var app = {
 
 	initialize: function() {
 		$('#searchBtn').click(app.onSearchInitiated);
+		$('#searchAnywhereBtn').click(app.onGlobalSearchInitiated);
 		$('#nameSearchBtn').click(app.onNameSearchInitiated);
 		$('#nameSearchTerm').keyup(app.onNameSearchKeyUp);
 	},
@@ -58,7 +59,13 @@ var app = {
 					var htmlStr = '<ul class="list-group">';
 
 					for (n = 0; n < data.length; n++) {
-						htmlStr += '<li class="list-group-item">' + data[n].name + ' (' + app.metersToMiles(data[n]['$distance'], 1) + ' mi)</li>';
+						htmlStr += '<li class="list-group-item">' + data[n].name;
+
+						if (data[n]['$distance']) {
+							htmlStr += ' (' + app.metersToMiles(data[n]['$distance'], 1) + ' mi)';
+						}
+
+						htmlStr += '</li>';
 					}
 
 					htmlStr += '</ul>';
@@ -78,12 +85,37 @@ var app = {
 		return false;
 	},
 
+	onGlobalSearchInitiated: function(e) {
+		var searchTerm = undefined;
+		var searchCity = undefined;
+		var searchCountryCode = undefined;
+
+		e.stopPropagation();
+
+		searchTerm = $('#searchAnywhereTerm').val() || '';
+		searchCity = $('#searchAnywhereCity').val() || '';
+
+		if (searchCity.length === 0) {
+			app.displayError('Please enter a city.');
+		} else {
+			if (searchTerm.length === 0) {
+				app.displayError('Please enter a search term.');
+			} else {
+				// Search...
+				searchCountryCode = $('#searchAnywhereCountry').val();
+				app.searchByCity(searchTerm, searchCity, searchCountryCode);
+			}
+		}
+
+		return false;
+	},
+
 	onSearchInitiated: function(e) {
 		var searchTerm = undefined;
 
 		e.stopPropagation();
 
-		searchTerm = '' + $('#searchTerm').val();
+		searchTerm = $('#searchTerm').val() || '';
 
 		if (searchTerm.length === 0) {
 			app.displayError('Please enter a search term.');
@@ -116,7 +148,7 @@ var app = {
 
 		console.log(data);
 
-		if (len > 0) {
+		if (len > 0) {			
 			map = new google.maps.Map(document.getElementById('map'), {
 				center: {
 					lat: userLatitude,
@@ -149,7 +181,14 @@ var app = {
 
 				resultsHTML = ''
 					+ '<div class="panel panel-primary">'
-					+ '    <div class="panel-heading"><span class="panel-title">' + markerLabel + ') ' + place.name + ' </span>(' + app.metersToMiles(place['$distance'], 1) + ' mi)</div>'
+					+ '    <div class="panel-heading"><span class="panel-title">' + markerLabel + ') ' + place.name + ' </span>';
+
+				if (place['$distance']) {
+					resultsHTML += '(' + app.metersToMiles(place['$distance'], 1) + ' mi)';
+				}
+				
+				resultsHTML +=
+					  '</div>'
 					+ '    <div class="panel-body">'
 					+ (place.neighborhood ? '<p class="pull-right"><i class="fa fa-home"></i> ' + place.neighborhood[0] + '</p><br/>' : '') 
     				+ '        ' + place.address + ' ' + (place.address_extended || '') + '<br/>'
@@ -276,6 +315,18 @@ var app = {
 				+ '</div>'
 			);
 		}
+	},
+
+	searchByCity: function(searchTerm, searchCity, searchCountryCode) {
+		console.log('Would search for "' + searchTerm + '" in "' + searchCity + '", "' + searchCountryCode + '"');
+		$.ajax({
+			cache: false,
+			error: app.onSearchError,
+			method: 'GET',
+			success: app.onSearchSuccess,
+			timeout: 5000,
+			url: app.API_BASE_URL + '/cityplaces?q=' + searchTerm + '&city=' + searchCity + '&country=' + searchCountryCode
+		});
 	},
 
 	searchByLatLong: function(searchTerm) {
