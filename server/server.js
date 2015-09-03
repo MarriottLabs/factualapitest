@@ -8,11 +8,36 @@ var factual = new Factual(process.env.FACTUAL_KEY, process.env.FACTUAL_SECRET);
 
 crosswalkCache = {};
 
+router.route('/cityplaces').get(
+	function(request, response) {
+		// TODO check paramters
+		// filters={"$and":[{"locality":"santa monica"},{"region":"ca"}]}
+
+
+		factual.get(
+			'/t/places' + (request.query.country ? '-' + request.query.country : ''),
+			{
+				q: request.query.q,
+				filters:  {
+					"locality": request.query.city
+				}
+			},
+			function (error, res) {
+				if (! error) {
+					response.jsonp(res.data);
+				} else {
+					// TODO error case...
+				}
+			}
+		);
+
+	}
+);
+
 router.route('/places').get(
 	function(request, response) {
 		// TODO check parameters
 
-		var countryCode = request.query.country;
 		factual.get(
 			'/t/places' + (request.query.country ? '-' + request.query.country : ''), 
 			{
