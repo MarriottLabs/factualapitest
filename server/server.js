@@ -97,6 +97,33 @@ router.route('/crosswalk').get(
 	}
 );
 
+router.route('/citynamesearch').get(
+	function(request, response) {
+		var filterObj = {
+			"$and": [
+				{ "locality": request.query.city },
+				{ "region": request.query.stateProvince },
+				{ "name" : { "$bw": request.query.searchTerm } }
+			]
+		};
+
+		factual.get('/t/places' + (request.query.country ? '-' + request.query.country : ''),
+				{
+					filters: filterObj,
+					select: 'name,factual_id,address'
+				},
+				function(error, res) {
+				if (! error) {
+					response.jsonp(res.data);
+				} else {
+					console.log(error);
+					response.jsonp([]);
+				}
+			}
+		);
+	}
+);
+
 router.route('/namesearch').get(
 	function(request, response) {
 		console.log('/t/places-us?geo={"$circle":{"$center":[' + request.query.latitude + ',' + request.query.longitude + '],"$meters":' + (request.query.radius || 1000) + '}}&filters={"name":{"$bw":"' + request.query.searchTerm + '"}}&select=name');
