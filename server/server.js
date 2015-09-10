@@ -13,14 +13,19 @@ router.route('/cityplaces').get(
 		// TODO check paramters
 		// filters={"$and":[{"locality":"santa monica"},{"region":"ca"}]}
 
+		var filterObj = {
+			"locality": request.query.city
+		};
+
+		if (request.query.stateProvince) {
+			filterObj.region = request.query.stateProvince
+		}
 
 		factual.get(
 			'/t/places' + (request.query.country ? '-' + request.query.country : ''),
 			{
 				q: request.query.q,
-				filters:  {
-					"locality": request.query.city
-				}
+				filters: filterObj
 			},
 			function (error, res) {
 				if (! error) {
