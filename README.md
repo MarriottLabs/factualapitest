@@ -47,6 +47,22 @@ Coffee places in Berlin, Germany:
 http://localhost:8888/cityplaces?q=coffee&city=berlin&country=de
 ```
 
+Coffee places in Springfield, United States:
+
+(returns results for multiple cities named Springfield).
+
+```
+http://localhost:8888/cityplaces?q=coffee&city=springfield&country=us
+```
+
+Coffee places in Springfield, Virginia, United States:
+
+(returns results for Springfield, VA only).
+
+```
+http://localhost:8888/cityplaces?q=coffee&city=springfield&stateProvince=va&country=us
+```
+
 ##Running Example
 
 The sample front end is running at:
