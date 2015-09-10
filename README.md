@@ -67,6 +67,7 @@ Places in Dallas, Texas, United States whose name begins with 'Star':
 
 ```
 http://localhost:8888/citynamesearch?searchTerm=star&city=dallas&stateProvince=tx&country=us
+```
 
 Get the full Factual place record for a specific Starbucks in Dallas, Texas:
 
