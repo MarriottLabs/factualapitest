@@ -102,10 +102,13 @@ router.route('/citynamesearch').get(
 		var filterObj = {
 			"$and": [
 				{ "locality": request.query.city },
-				{ "region": request.query.stateProvince },
 				{ "name" : { "$bw": request.query.searchTerm } }
 			]
 		};
+
+		if (request.query.stateProvince) {
+			filterObj['$and'].push({ "region": request.query.stateProvince });
+		}
 
 		factual.get('/t/places' + (request.query.country ? '-' + request.query.country : ''),
 				{
@@ -126,7 +129,6 @@ router.route('/citynamesearch').get(
 
 router.route('/namesearch').get(
 	function(request, response) {
-		console.log('/t/places-us?geo={"$circle":{"$center":[' + request.query.latitude + ',' + request.query.longitude + '],"$meters":' + (request.query.radius || 1000) + '}}&filters={"name":{"$bw":"' + request.query.searchTerm + '"}}&select=name');
 		factual.get('/t/places-us?geo={"$circle":{"$center":[' + request.query.latitude + ',' + request.query.longitude + '],"$meters":' + (request.query.radius || 1000) + '}}&filters={"name":{"$bw":"' + request.query.searchTerm + '"}}&select=name,factual_id',
 			function(error, res) {
 				if (! error) {
