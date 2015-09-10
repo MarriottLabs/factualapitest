@@ -63,6 +63,12 @@ Coffee places in Springfield, Virginia, United States:
 http://localhost:8888/cityplaces?q=coffee&city=springfield&stateProvince=va&country=us
 ```
 
+Places in Dallas, Texas, United States whose name begins with 'Star':
+
+```
+http://localhost:8888/citynamesearch?searchTerm=star&city=dallas&stateProvince=tx&country=us
+```
+
 ##Running Example
 
 The sample front end is running at:
@@ -84,6 +90,7 @@ So to make the queries shown above against this instance, just go to:
 * https://factualserver.marriottlabs.com/crosswalk?id=1adee49b-39d9-4189-9bab-bf19c59c46a2&namespace=yelp
 * https://factualserver.marriottlabs.com/namesearch?searchTerm=pa&latitude=32.721467&longitude=-117.164403&radius=5000
 * https://factualserver.marriottlabs.com/cityplaces?q=coffee&city=berlin&country=de
+* https://factualserver.marriottlabs.com/citynamesearch?searchTerm=star&city=dallas&stateProvince=tx&country=us
 
 To try other locations, just substitute their lat/long in.
 
