@@ -67,6 +67,13 @@ Places in Dallas, Texas, United States whose name begins with 'Star':
 
 ```
 http://localhost:8888/citynamesearch?searchTerm=star&city=dallas&stateProvince=tx&country=us
+
+Get the full Factual place record for a specific Starbucks in Dallas, Texas:
+
+(id = Factual place ID)
+
+```
+http://localhost:8888/place?id=1ae08bd0-b32a-4b53-9acf-b3569e15cb88
 ```
 
 ##Running Example
@@ -91,6 +98,7 @@ So to make the queries shown above against this instance, just go to:
 * https://factualserver.marriottlabs.com/namesearch?searchTerm=pa&latitude=32.721467&longitude=-117.164403&radius=5000
 * https://factualserver.marriottlabs.com/cityplaces?q=coffee&city=berlin&country=de
 * https://factualserver.marriottlabs.com/citynamesearch?searchTerm=star&city=dallas&stateProvince=tx&country=us
+* https://factualserver.marriottlabs.com/place?id=1ae08bd0-b32a-4b53-9acf-b3569e15cb88
 
 To try other locations, just substitute their lat/long in.
 

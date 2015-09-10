@@ -140,6 +140,21 @@ router.route('/namesearch').get(
 	}
 );
 
+router.route('/place').get(
+	function(request, response) {
+		factual.get('/t/places/' + request.query.id, 
+			function(error, res) {
+				if (! error) {
+					response.jsonp(res.data);
+				} else {
+					console.log(error);
+					response.jsonp([]);
+				}
+			}
+		);
+	}
+);
+
 app.use(cors());
 app.use('/', router);
 app.listen(port);
