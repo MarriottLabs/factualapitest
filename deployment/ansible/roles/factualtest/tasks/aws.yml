@@ -42,6 +42,8 @@
     restart_policy: on-failure
     ports:
         - "9999:80"
+    env:
+      LOGSPOUT: ignore
 
 - name: Bounce server
   docker:
