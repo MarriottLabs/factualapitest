@@ -85,6 +85,7 @@ router.route('/crosswalk').get(
 					if (! error) {
 						// console.log('Setting ' + cacheKey);
 						// crosswalkCache.cacheKey = JSON.parse(JSON.stringify(res.data));
+						console.log(res.data);
 						response.jsonp(res.data);
 					} else {
 						// TODO error case...
