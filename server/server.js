@@ -151,17 +151,25 @@ router.route('/place').get(
 					// Let's go get the crosswalk data now
 					factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '", "namespace": "facebook"}',
 						function (e, r) {
-							var fbObj = {
-								id: '',
-								profileUrl: ''
-							};
+							// var fbObj = {
+							// 	id: '',
+							// 	profileUrl: ''
+							// };
+							var fbArr = [];
+							var n = 0;
 
 							if (! e) {
-								if (r.data && r.data[0]) {
-									fbObj.id = r.data[0].namespace_id;
-									fbObj.profileUrl = r.data[0].url;				
+								console.log(r.data);
+								if (r.data) {
+									for (n = 0; n < r.data.length; n++) {
+										fbArr.push({
+											id: r.data[n].namespace_id,
+											profileUrl: r.data[n].url
+										});
+									} 
 								}
-								res.data[0].facebook = fbObj;
+
+								res.data[0].facebook = fbArr;
 								response.jsonp(res.data[0]);
 							} else {
 								console.log(e);
