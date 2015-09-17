@@ -6,6 +6,7 @@ var port = process.env.PORT || 8888;
 var Factual = require('factual-api');
 var factual = new Factual(process.env.FACTUAL_KEY, process.env.FACTUAL_SECRET);
 var logFactualJSON = process.env.FACTUAL_LOG_JSON 
+var util = require('util');
 
 crosswalkCache = {};
 
@@ -33,12 +34,15 @@ router.route('/cityplaces').get(
 				if (! error) {
 					if (logFactualJSON) { 
 						console.log(request.url + '\n'); 
-						console.log(res.data);
+						console.log(util.inspect(res.data, { depth: null }));
 					}
 					response.jsonp(res.data);
 				} else {
 					// TODO error case...
-					if (logFactualJSON) { console.log(request.url + '\n' + []); }
+					if (logFactualJSON) { 
+						console.log(request.url + '\n');
+						console.log([]); 
+					}
 					response.jsonp([]);
 				}
 			}
@@ -68,9 +72,20 @@ router.route('/places').get(
 			}, 
 			function (error, res) {
 				if (! error) {
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log(util.inspect(res.data, { depth: null }));
+					}
+
 					response.jsonp(res.data);
 				} else {
 					// TODO error case...
+					console.log(error);
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log([]);
+					}
+					response.jsonp([]);
 				}
 			}
 		);
@@ -79,30 +94,25 @@ router.route('/places').get(
 
 router.route('/crosswalk').get(
 	function(request, response) {
-		// Check if we have this in the cache as we only get 500 crosswalk queries a day
-		//var cacheKey = 'cacheKey' + request.query.id + (request.query.namespace || '');
-		//var cachedData = crosswalkCache.cacheKey;
-
-		// if (cachedData) {
-		// 	console.log('Serving ' + cacheKey + ' from crosswalk API cache.');
-		// 	response.jsonp(cachedData);
-		// 	return;
-		// } else {
-			factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '"' + (request.query.namespace ? ', "namespace": "' + request.query.namespace + '"' : '') + '}',
-				function (error, res) {
-					if (! error) {
-						// console.log('Setting ' + cacheKey);
-						// crosswalkCache.cacheKey = JSON.parse(JSON.stringify(res.data));
-						console.log(res.data);
-						response.jsonp(res.data);
-					} else {
-						// TODO error case...
-						console.log(error);
-						response.jsonp([]);
+		factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '"' + (request.query.namespace ? ', "namespace": "' + request.query.namespace + '"' : '') + '}',
+			function (error, res) {
+				if (! error) {
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log(util.inspect(res.data, { depth: null }));
 					}
+
+					response.jsonp(res.data);
+				} else {
+					console.log(error);
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log([]);
+					}
+					response.jsonp([]);
 				}
-			);
-		// }
+			}
+		);
 	}
 );
 
@@ -120,15 +130,25 @@ router.route('/citynamesearch').get(
 		}
 
 		factual.get('/t/places' + (request.query.country ? '-' + request.query.country : ''),
-				{
-					filters: filterObj,
-					select: 'name,factual_id,address'
-				},
-				function(error, res) {
+			{
+				filters: filterObj,
+				select: 'name,factual_id,address'
+			},
+			function(error, res) {
 				if (! error) {
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log(util.inspect(res.data, { depth: null }));
+					}
 					response.jsonp(res.data);
 				} else {
 					console.log(error);
+
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log([]);
+					}
+
 					response.jsonp([]);
 				}
 			}
@@ -141,9 +161,17 @@ router.route('/namesearch').get(
 		factual.get('/t/places-us?geo={"$circle":{"$center":[' + request.query.latitude + ',' + request.query.longitude + '],"$meters":' + (request.query.radius || 1000) + '}}&filters={"name":{"$bw":"' + request.query.searchTerm + '"}}&select=name,factual_id',
 			function(error, res) {
 				if (! error) {
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log(util.inspect(res.data, { depth: null }));
+					}
 					response.jsonp(res.data);
 				} else {
 					console.log(error);
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log([]);
+					}
 					response.jsonp([]);
 				}
 			}
@@ -159,10 +187,6 @@ router.route('/place').get(
 					// Let's go get the crosswalk data now
 					factual.get('/t/crosswalk?filters={"factual_id": "' + request.query.id + '", "namespace": "facebook"}',
 						function (e, r) {
-							// var fbObj = {
-							// 	id: '',
-							// 	profileUrl: ''
-							// };
 							var fbArr = [];
 							var n = 0;
 							var nsId = '';
@@ -193,15 +217,27 @@ router.route('/place').get(
 								}
 
 								res.data[0].facebook = fbArr;
+
+								if (logFactualJSON) { 
+									console.log(request.url + '\n'); 
+									console.log(util.inspect(res.data, { depth: null }));
+								}
 								response.jsonp(res.data[0]);
 							} else {
-								console.log(e);
+								if (logFactualJSON) { 
+									console.log(request.url + '\n'); 
+									console.log([]);
+								}
 								response.jsonp([]);
 							}
 						}
 					);
 				} else {
 					console.log(error);
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log([]);
+					}
 					response.jsonp([]);
 				}
 			}
