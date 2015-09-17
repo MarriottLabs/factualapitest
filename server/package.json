@@ -6,7 +6,7 @@
 		"express": "4.x",
 		"cors": "2.4.x",
 		"body-parser": "1.8.x",
-		"factual-api": "1.0.7"
+		"oauth": "0.9.7"
 	},
 	"scripts": {
 		"start": "node server.js"

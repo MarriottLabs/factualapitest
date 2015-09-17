@@ -3,7 +3,7 @@ var cors = require('cors');
 var app = express();
 var router = express.Router();
 var port = process.env.PORT || 8888;
-var Factual = require('factual-api');
+var Factual = require('./factual');
 var factual = new Factual(process.env.FACTUAL_KEY, process.env.FACTUAL_SECRET);
 var logFactualJSON = process.env.FACTUAL_LOG_JSON 
 var util = require('util');
@@ -242,6 +242,12 @@ router.route('/place').get(
 				}
 			}
 		);
+	}
+);
+
+router.route('/quota').get(
+	function(request, response) {
+		response.jsonp(factual.getApiAllocation());
 	}
 );
 
