@@ -5,6 +5,7 @@ var router = express.Router();
 var port = process.env.PORT || 8888;
 var Factual = require('factual-api');
 var factual = new Factual(process.env.FACTUAL_KEY, process.env.FACTUAL_SECRET);
+var logFactualJSON = process.env.FACTUAL_LOG_JSON 
 
 crosswalkCache = {};
 
@@ -28,10 +29,17 @@ router.route('/cityplaces').get(
 				filters: filterObj
 			},
 			function (error, res) {
+
 				if (! error) {
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log(res.data);
+					}
 					response.jsonp(res.data);
 				} else {
 					// TODO error case...
+					if (logFactualJSON) { console.log(request.url + '\n' + []); }
+					response.jsonp([]);
 				}
 			}
 		);
@@ -157,13 +165,28 @@ router.route('/place').get(
 							// };
 							var fbArr = [];
 							var n = 0;
+							var nsId = '';
+							var urlParts = [];
 
 							if (! e) {
-								console.log(r.data);
 								if (r.data) {
+									// We notice somtimes Facebook data was coming back with a 
+									// URL but no ID so this is a kludge to try and get ID from 
+									// URL in those cases
 									for (n = 0; n < r.data.length; n++) {
+										if (r.data[n].namespace_id) {
+											nsId = r.data[n].namespace_id;
+										} else {
+											if (r.data[n].url) {
+												urlParts = r.data[n].url.split('/');
+												if (urlParts.length > 0) {
+													nsId = urlParts[urlParts.length - 1];
+												}
+											}
+										}
+
 										fbArr.push({
-											id: r.data[n].namespace_id,
+											id: nsId,
 											profileUrl: r.data[n].url
 										});
 									} 
