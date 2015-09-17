@@ -54,5 +54,6 @@
     env:
       FACTUAL_KEY: "{{ factual_key }}"
       FACTUAL_SECRET: "{{ factual_secret }}"
+      FACTUAL_LOG_JSON: true
     ports:
         - "8888:8888"
