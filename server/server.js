@@ -10,6 +10,31 @@ var util = require('util');
 
 crosswalkCache = {};
 
+router.route('/resolve').get(
+	function(request, response) {
+		factual.get(
+			'/t/places/resolve?values={"name":"' + request.query.name + '", "latitude": ' + request.query.latitude + ', "longitude": ' + request.query.longitude + '}',
+			function (error, res) {
+				if (! error) {
+					if (logFactualJSON) { 
+						console.log(request.url + '\n'); 
+						console.log(util.inspect(res.data, { depth: null }));
+					}
+					response.jsonp(res.data);
+				} else {
+					console.log(error);
+					
+					if (logFactualJSON) { 
+						console.log(request.url + '\n');
+						console.log([]); 
+					}
+					response.jsonp([]);
+				}
+			}
+		);
+	}
+);
+
 router.route('/cityplaces').get(
 	function(request, response) {
 		// TODO check paramters
@@ -39,6 +64,8 @@ router.route('/cityplaces').get(
 					response.jsonp(res.data);
 				} else {
 					// TODO error case...
+					console.log(error);
+
 					if (logFactualJSON) { 
 						console.log(request.url + '\n');
 						console.log([]); 
